@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  db_species_local:
+    image: postgres:15.3-alpine
+    container_name: db_species_psql_local
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: species
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: speciespassword
+    ports:
+      - '5434:5432'
+    volumes:
+      - db_species_local:/var/lib/postgresql/data
+
+volumes:
+  db_species_local:
+    driver: local
