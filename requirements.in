@@ -1,0 +1,8 @@
+Django
+django-ninja
+django-redis
+django-bitfield
+
+psycopg2-binary
+
+tqdm
