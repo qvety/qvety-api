@@ -1,6 +1,12 @@
 version: '3.9'
 
 services:
+  redis_species_local:
+    image: redis:latest
+    container_name: redis_species_local
+    restart: always
+    ports:
+      - '6379:6379'
   db_species_local:
     image: postgres:15.3-alpine
     container_name: db_species_psql_local
