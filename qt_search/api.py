@@ -1,6 +1,8 @@
 from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
+from django.views.decorators.cache import cache_page
 from ninja import NinjaAPI
+from ninja.decorators import decorate_view
 from ninja.pagination import PageNumberPagination, paginate
 from ninja.params import Query
 
@@ -27,6 +29,7 @@ def get_species(request, filters: FiltersSchema = Query(...)):    # noqa: B008
 
 
 @app.get("/species/{slug}/", response=SpeciesDetailsSchema)
+@decorate_view(cache_page(24 * 60 * 60))
 def get_specie_details(request, slug: str):
     return get_object_or_404(
         Specie.objects.prefetch_related(
