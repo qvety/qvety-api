@@ -1,17 +1,12 @@
 import os
-from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+from core.env import BASE_DIR, env
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-)jbq8g09*%d*emrzu)n*xe1_6d646wqn_)v$7xz22)pd3wzj4)')
+env.read_env(os.path.join(BASE_DIR, '.env'))
 
-DEBUG = int(os.environ.get('DEBUG', 1))
-
-ALLOWED_HOSTS = ['*']
-
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
+SECRET_KEY = env('DJANGO_SECRET_KEY')
+DEBUG = env.bool('DJANGO_DEBUG', default=False)
+ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=[])
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -61,18 +56,20 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv('POSTGRES_DB', 'species'),
-        'USER': os.getenv('POSTGRES_USER', 'postgres'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'speciespassword'),
-        'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
-        'PORT': os.getenv('POSTGRES_PORT', '5434'),
+        'NAME': env('POSTGRES_DB', default='species'),
+        'USER': env('POSTGRES_USER', default='postgres'),
+        'PASSWORD': env('POSTGRES_PASSWORD', default='speciespassword'),
+        'HOST': env('POSTGRES_HOST', default='localhost'),
+        'PORT': env('POSTGRES_PORT', default='5434'),
     }
 }
 
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://localhost:6379/1',
+        'LOCATION': f'redis://{env('REDIS_HOST', default='localhost')}:'
+                    f'{env('REDIS_PORT', default='6379')}/'
+                    f'{env('REDIS_DB_INDEX', default='1')}',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         },
@@ -102,31 +99,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_ROOT = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-if DEBUG:
-    LOGGING = {
-        'version': 1,
-        'filters': {
-            'require_debug_true': {
-                '()': 'django.utils.log.RequireDebugTrue',
-            }
-        },
-        'handlers': {
-            'console': {
-                'level': 'DEBUG',
-                'filters': ['require_debug_true'],
-                'class': 'logging.StreamHandler',
-            }
-        },
-        'loggers': {
-            'django.db.backends': {
-                'level': 'DEBUG',
-                'handlers': ['console'],
-                'propagate': False,
-            }
-        }
-    }

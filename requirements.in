@@ -2,6 +2,7 @@ Django
 django-ninja
 django-redis
 django-bitfield
+django-environ
 
 psycopg2-binary
 

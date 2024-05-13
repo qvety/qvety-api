@@ -7,3 +7,5 @@ flake8-comprehensions
 flake8-print
 
 isort
+
+django-debug-toolbar
