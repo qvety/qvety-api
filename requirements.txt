@@ -16,6 +16,8 @@ django==5.0.6
     #   django-redis
 django-bitfield==2.2.0
     # via -r requirements.in
+django-environ==0.11.2
+    # via -r requirements.in
 django-ninja==1.1.0
     # via -r requirements.in
 django-redis==5.4.0
