@@ -13,7 +13,7 @@ from qt_search.schemas.specie import SpeciesDetailsSchema, SpeciesSchema
 app = NinjaAPI()
 
 
-@app.get("/species/", response=list[SpeciesSchema])
+@app.get('/species', response=list[SpeciesSchema])
 @paginate(PageNumberPagination)
 def get_species(request, filters: FiltersSchema = Query(...)):    # noqa: B008
     species = filters.filter(
@@ -28,7 +28,7 @@ def get_species(request, filters: FiltersSchema = Query(...)):    # noqa: B008
     return species
 
 
-@app.get("/species/{slug}/", response=SpeciesDetailsSchema)
+@app.get('/species/{slug}', response=SpeciesDetailsSchema)
 @decorate_view(cache_page(24 * 60 * 60))
 def get_specie_details(request, slug: str):
     return get_object_or_404(
