@@ -9,7 +9,7 @@ urlpatterns = [
     path('api/', app.urls),
 ]
 
-if settings.ALLOW_DEBUG_TOOLBAR:
+if settings.DEBUG and settings.ALLOW_DEBUG_TOOLBAR:
     import debug_toolbar
 
     urlpatterns += [
