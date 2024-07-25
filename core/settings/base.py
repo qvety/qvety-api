@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     # Modules
     'qt_search.apps.SpSearchConfig',
     'qt_user.apps.QtUserConfig',
+    'qt_auth.apps.QtAuthConfig',
 ]
 
 MIDDLEWARE = [
