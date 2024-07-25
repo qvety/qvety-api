@@ -21,6 +21,7 @@ INSTALLED_APPS = [
 
     # Modules
     'qt_search.apps.SpSearchConfig',
+    'qt_user.apps.QtUserConfig',
 ]
 
 MIDDLEWARE = [
@@ -103,3 +104,5 @@ STATIC_ROOT = '/static/'
 STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'qt_user.User'
