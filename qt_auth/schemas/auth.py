@@ -12,7 +12,7 @@ EMAIL_RE = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 
 class SignUp(Schema):
     email: str = Field(..., min_length=3, max_length=512)
-    username: t.Optional[str] = Field(default=None, min_length=2, max_length=64)
+    username: str = Field(default=None, validate_default=True, min_length=2, max_length=64)
     password: str = Field(..., min_length=8, max_length=64)
 
     @field_validator('email')
@@ -23,7 +23,7 @@ class SignUp(Schema):
             raise ValidationError([{'loc': ('email',), 'msg': 'Incorrect format'}])
         return email
 
-    @field_validator('username')
+    @field_validator('username', mode='before')
     def set_empty_username(cls, value: t.Optional[str], values: dict) -> str:
         if value:
             return value
