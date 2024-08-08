@@ -41,3 +41,33 @@ class SignUpTestCase(TestCase):
 
         user = User.objects.get(username='test')
         self.assertEqual(user.username, 'test')
+
+    def test_exist_creds(self):
+        user_data = {
+            'password': 'superpass',
+            'email': 'test@gmail.com'
+        }
+        resp = self.client.post(self.signup_url, data=user_data, content_type='application/json')
+        self.assertEqual(resp.status_code, 201)
+
+        exist_username = {
+            'username': 'test',
+            'password': 'superpass',
+            'email': 'test1@gmail.com'
+        }
+        resp = self.client.post(self.signup_url, data=exist_username, content_type='application/json')
+        self.assertEqual(resp.status_code, 409)
+
+        data = resp.json()
+        self.assertEqual(data['errors'][0]['username'], 'Username is already taken')
+
+        exist_email = {
+            'username': 'test1',
+            'password': 'superpass',
+            'email': 'test@gmail.com'
+        }
+        resp = self.client.post(self.signup_url, data=exist_email, content_type='application/json')
+        self.assertEqual(resp.status_code, 409)
+
+        data = resp.json()
+        self.assertEqual(data['errors'][0]['email'], 'Email is already taken')
