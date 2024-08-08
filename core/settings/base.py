@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     # Modules
     'qt_search.apps.SpSearchConfig',
     'qt_user.apps.QtUserConfig',
+    'qt_auth.apps.QtAuthConfig',
 ]
 
 MIDDLEWARE = [
@@ -65,12 +66,16 @@ DATABASES = {
     }
 }
 
+REDIS_HOST = env('REDIS_HOST', default='localhost')
+REDIS_PORT = env('REDIS_PORT', default='6379')
+REDIS_DB_INDEX = env('REDIS_DB_INDEX', default='1')
+
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': f'redis://{env('REDIS_HOST', default='localhost')}:'
-                    f'{env('REDIS_PORT', default='6379')}/'
-                    f'{env('REDIS_DB_INDEX', default='1')}',
+        'LOCATION': f'redis://{REDIS_HOST}:'
+                    f'{REDIS_PORT}/'
+                    f'{REDIS_DB_INDEX}',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         },
@@ -106,3 +111,7 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'qt_user.User'
+
+AUTH_ACCESS_TOKEN_EXPIRATION = 60 * 1  # seconds
+AUTH_REFRESH_TOKEN_EXPIRATION = 30 * 24 * 60 * 60  # seconds
+AUTH_KEY = env('AUTH_KEY', default='superauthkey')
