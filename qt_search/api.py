@@ -1,7 +1,7 @@
 from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_page
-from ninja import NinjaAPI
+from ninja import Router
 from ninja.decorators import decorate_view
 from ninja.pagination import PageNumberPagination, paginate
 from ninja.params import Query
@@ -10,7 +10,7 @@ from qt_search.models import CommonName, DistributionSpecie, Specie
 from qt_search.schemas.filter import FiltersSchema
 from qt_search.schemas.specie import SpeciesDetailsSchema, SpeciesSchema
 
-app = NinjaAPI()
+app = Router()
 
 
 @app.get('/species', response=list[SpeciesSchema])

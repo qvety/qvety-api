@@ -2,11 +2,11 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 
-from qt_search.api import app
+from core.api import ninja
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', app.urls),
+    path('api/', ninja.urls),
 ]
 
 if settings.DEBUG and settings.ALLOW_DEBUG_TOOLBAR:
