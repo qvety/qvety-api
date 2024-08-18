@@ -11,7 +11,7 @@ class RoomTestCase(TestCase):
     def setUp(self):
         self.client = AuthenticatedClient(router)
 
-        patcher = patch('qt_auth.utils.AuthBearer.authenticate')
+        patcher = patch('qt_auth.logic.jwt_auth_bear.AuthBearer.authenticate')
         self.mocked_object = patcher.start()
         self.mocked_object.return_value = UserFactory()
         self.addCleanup(patcher.stop)
