@@ -3,12 +3,12 @@ from django.db.models import Q
 from ninja import Router
 
 from qt_auth.exceptions import JWTDecodeError, UserNotFound
-from qt_auth.schemas.auth import ErrorResponse, JWTTokenInfo, JWTRefreshTokenInfo, SignIn, SignUp, StatusOk
+from qt_auth.schemas.auth import ErrorResponse, JWTRefreshTokenInfo, JWTTokenInfo, SignIn, SignUp, StatusOk
 from qt_auth.utils import (
     REFRESH_TOKEN_TYPE,
     create_access_token,
     create_refresh_token,
-    get_verified_payload_from_token,
+    get_verified_data_from_token,
     is_token_revoked,
     revoke_token,
 )
@@ -72,7 +72,7 @@ def signin(request, data: SignIn):
 @app.post("/refresh", response={200: JWTTokenInfo, 400: ErrorResponse, 401: ErrorResponse})
 def refresh(request, data: JWTRefreshTokenInfo):
     try:
-        refresh_token_payload = get_verified_payload_from_token(data.refresh)
+        refresh_token_payload, user = get_verified_data_from_token(data.refresh)
     except JWTDecodeError as e:
         message = str(e)
         return 401, ErrorResponse(
@@ -104,7 +104,6 @@ def refresh(request, data: JWTRefreshTokenInfo):
 
     revoke_token(refresh_token_payload)
 
-    user = User.objects.get(pk=refresh_token_payload['user_id'])
     access_token = create_access_token(user)
     refresh_token = create_refresh_token(user)
     return JWTTokenInfo(access=access_token, refresh=refresh_token)

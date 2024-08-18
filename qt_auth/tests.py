@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from django.test import TestCase
 
-from qt_auth.utils import create_access_token, create_refresh_token, get_verified_payload_from_token
+from qt_auth.utils import create_access_token, create_refresh_token, get_verified_data_from_token
 from qt_user.models import User
 
 
@@ -155,8 +155,8 @@ class SignInTestCase(TestCase):
 
         data = resp.json()
         access, refresh = data['access'], data['refresh']
-        verified_payload_access = get_verified_payload_from_token(access)
-        verified_payload_refresh = get_verified_payload_from_token(refresh)
+        verified_payload_access = get_verified_data_from_token(access)
+        verified_payload_refresh = get_verified_data_from_token(refresh)
         fifteen_minutes_timestamp = datetime.now().timestamp() + 60 * 1
         one_day_timestamp = datetime.now().timestamp() + 30 * 24 * 60 * 60
 

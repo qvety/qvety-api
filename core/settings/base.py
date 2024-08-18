@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'qt_search.apps.SpSearchConfig',
     'qt_user.apps.QtUserConfig',
     'qt_auth.apps.QtAuthConfig',
+    'qt_space.apps.QtSpaceConfig',
 ]
 
 MIDDLEWARE = [
@@ -112,6 +113,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'qt_user.User'
 
-AUTH_ACCESS_TOKEN_EXPIRATION = 60 * 1  # seconds
+AUTH_ACCESS_TOKEN_EXPIRATION = 60 * 15  # seconds
 AUTH_REFRESH_TOKEN_EXPIRATION = 30 * 24 * 60 * 60  # seconds
 AUTH_KEY = env('AUTH_KEY', default='superauthkey')

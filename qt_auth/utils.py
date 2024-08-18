@@ -22,14 +22,13 @@ KEY = base64.b64decode(settings.AUTH_KEY)
 class AuthBearer(HttpBearer):
     def authenticate(self, request, token):
         try:
-            refresh_token_payload = get_verified_payload_from_token(token)
+            refresh_token_payload, user = get_verified_data_from_token(token)
         except (JWTDecodeError, UserNotFound):
             return None
 
         if refresh_token_payload['type'] != ACCESS_TOKEN_TYPE:
             return None
 
-        user = User.objects.get(pk=refresh_token_payload['user_id'])
         return user
 
 
@@ -102,7 +101,7 @@ def is_token_revoked(payload: dict) -> bool:
     return persistent_client.get(token_uuid) is not None
 
 
-def get_verified_payload_from_token(token: str) -> dict:
+def get_verified_data_from_token(token: str) -> tuple[dict, User]:
     unverified_payload = _decode_token_payload(token=token, is_verified=False)
     if not (user_id := unverified_payload.get('user_id')):
         raise JWTDecodeError('User id not found in payload')
@@ -112,7 +111,8 @@ def get_verified_payload_from_token(token: str) -> dict:
     except User.DoesNotExist:
         raise UserNotFound('User dose not exist')
 
-    return _decode_token_payload(token=token, is_verified=True, user=suggested_user)
+    # After validation, it is highly likely that suggested_user will be correct
+    return _decode_token_payload(token=token, is_verified=True, user=suggested_user), suggested_user
 
 
 def _decode_token_payload(token: str, is_verified: bool, user: User | None = None) -> dict:
