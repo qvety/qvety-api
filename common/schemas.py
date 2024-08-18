@@ -1,7 +1,7 @@
 from ninja import Schema
 
 
-class ErrorResponseTest(Schema):
+class ErrorResponse(Schema):
     code: str
     detail: str
-    error: str = ''
+    errors: list[dict[str, str]] = []

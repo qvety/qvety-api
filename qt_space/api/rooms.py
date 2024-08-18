@@ -5,9 +5,8 @@ from ninja import Router, Schema
 
 from common.exceptions import BaseQtError
 from common.http_response import QtORJSONResponse
-from common.schemas import ErrorResponseTest
-from qt_auth.schemas.auth import ErrorResponse, StatusOk
-from qt_auth.utils import AuthBearer
+from common.schemas import ErrorResponse
+from qt_auth.logic.jwt_auth_bear import AuthBearer
 from qt_space.logic.rooms_service import RoomsServie
 from qt_space.schemas.space import ListSpaceResponseSchema, RoomRequestSchema, RoomResponseSchema
 
@@ -19,7 +18,7 @@ router = Router()
     auth=AuthBearer(),
     response={
         201: RoomResponseSchema,
-        (400, 409): ErrorResponseTest,
+        (400, 409): ErrorResponse,
     },
 )
 def create_room(request: HttpRequest, data: RoomRequestSchema) -> QtORJSONResponse:
@@ -56,7 +55,7 @@ def get_rooms_list(request: HttpRequest) -> QtORJSONResponse:
     auth=AuthBearer(),
     response={
         200: RoomResponseSchema,
-        404: ErrorResponseTest,
+        404: ErrorResponse,
     },
 )
 def get_room_by_uuid(request: HttpRequest, uid: uuid.UUID) -> QtORJSONResponse:
@@ -76,7 +75,7 @@ def get_room_by_uuid(request: HttpRequest, uid: uuid.UUID) -> QtORJSONResponse:
     path='/room/{uid}',
     auth=AuthBearer(),
     response={
-        200: StatusOk,
+        200: RoomResponseSchema,
         404: ErrorResponse,
     },
 )

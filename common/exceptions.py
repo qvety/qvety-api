@@ -1,5 +1,5 @@
 from common.http_response import QtORJSONResponse
-from common.schemas import ErrorResponseTest
+from common.schemas import ErrorResponse
 
 
 class BaseQtError(Exception):
@@ -9,6 +9,6 @@ class BaseQtError(Exception):
 
     def to_response(self) -> QtORJSONResponse:
         return QtORJSONResponse(
-            data=ErrorResponseTest(code=self.code, detail=self.detail).model_dump(),
+            data=ErrorResponse(code=self.code, detail=self.detail).model_dump(),
             status=self.status,
         )

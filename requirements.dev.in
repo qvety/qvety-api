@@ -9,3 +9,4 @@ flake8-print
 isort
 
 django-debug-toolbar
+factory-boy
