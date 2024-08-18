@@ -16,6 +16,7 @@ app = Router()
 @app.get('/species', response=list[SpeciesSchema])
 @paginate(PageNumberPagination)
 def get_species(request, filters: FiltersSchema = Query(...)):    # noqa: B008
+    # Need to remove distinct for neste query!!!
     species = filters.filter(
         Specie.objects
         .prefetch_related(
@@ -23,7 +24,7 @@ def get_species(request, filters: FiltersSchema = Query(...)):    # noqa: B008
                 'common_names',
                 queryset=CommonName.objects.filter(is_main=True, lang='en')[:1],
                 to_attr='main_common_name',
-            )).only('slug', 'latin_name', 'image_url').order_by('rating').all()
+            )).only('slug', 'latin_name', 'image_url').order_by('rating').distinct().all()
     )
     return species
 
