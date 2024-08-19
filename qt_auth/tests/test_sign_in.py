@@ -1,18 +1,14 @@
 from datetime import datetime
 
 from django.test import TestCase
-from ninja.testing import TestClient
 
-from qt_auth.api.auth import router
 from qt_auth.logic.services.jwt_service import JWTService
 from qt_auth.tests.factories import UserFactory
 
 
 class SignInTestCase(TestCase):
     def setUp(self):
-        self.client = TestClient(router)
-
-        self.signin_url = '/signin'
+        self.signin_url = '/api/auth/signin'
         self.base_user_data = {
             'password': 'superpass',
             'username': 'test',
@@ -25,7 +21,7 @@ class SignInTestCase(TestCase):
             'password': 'superpass',
             'username': 'test',
         }
-        resp = self.client.post(self.signin_url, json=user_data)
+        resp = self.client.post(self.signin_url, data=user_data, content_type='application/json')
         self.assertEqual(resp.status_code, 200)
 
         data = resp.json()
@@ -37,7 +33,7 @@ class SignInTestCase(TestCase):
             'password': 'superpass',
             'username': 'test@test.com',
         }
-        resp = self.client.post(self.signin_url, json=user_data)
+        resp = self.client.post(self.signin_url, data=user_data, content_type='application/json')
         self.assertEqual(resp.status_code, 200)
 
         data = resp.json()
@@ -49,7 +45,7 @@ class SignInTestCase(TestCase):
             'password': 'superpass',
             'username': 'fake@test.com',
         }
-        resp = self.client.post(self.signin_url, json=user_data)
+        resp = self.client.post(self.signin_url, data=user_data, content_type='application/json')
         self.assertEqual(resp.status_code, 401)
 
         data = resp.json()
@@ -60,7 +56,7 @@ class SignInTestCase(TestCase):
             'password': 'zalupka228',
             'username': 'test',
         }
-        resp = self.client.post(self.signin_url, json=user_data)
+        resp = self.client.post(self.signin_url, data=user_data, content_type='application/json')
         self.assertEqual(resp.status_code, 401)
 
         data = resp.json()
@@ -71,7 +67,7 @@ class SignInTestCase(TestCase):
             'password': 'superpass',
             'username': 'test',
         }
-        resp = self.client.post(self.signin_url, json=user_data)
+        resp = self.client.post(self.signin_url, data=user_data, content_type='application/json')
         self.assertEqual(resp.status_code, 200)
 
         data = resp.json()

@@ -1,19 +1,15 @@
 from unittest.mock import patch
 
 from django.test import TestCase
-from ninja.testing import TestClient
 
-from qt_auth.api.auth import router
 from qt_auth.logic.services.jwt_service import JWTService
 from qt_auth.tests.factories import UserFactory
 
 
 class RefreshTokenTestCase(TestCase):
     def setUp(self):
-        self.client = TestClient(router)
-
-        self.signin_url = '/signin'
-        self.refresh_url = '/refresh'
+        self.signin_url = '/api/auth/signin'
+        self.refresh_url = '/api/auth/refresh'
         self.base_user_data = {
             'password': 'superpass',
             'username': 'test',
@@ -30,12 +26,12 @@ class RefreshTokenTestCase(TestCase):
             'password': 'superpass',
             'username': 'test',
         }
-        resp_signin = self.client.post(self.signin_url, json=user_data)
+        resp_signin = self.client.post(self.signin_url, data=user_data, content_type='application/json')
 
         data = resp_signin.json()
         refresh_token = {'refresh': data['refresh']}
 
-        resp = self.client.post(self.refresh_url, json=refresh_token)
+        resp = self.client.post(self.refresh_url, data=refresh_token, content_type='application/json')
         self.assertEqual(resp.status_code, 200)
 
         data = resp.json()
@@ -44,7 +40,7 @@ class RefreshTokenTestCase(TestCase):
 
     def test_wrong_token(self):
         refresh_token = {'refresh': 'zaluplka'}
-        resp = self.client.post(self.refresh_url, json=refresh_token)
+        resp = self.client.post(self.refresh_url, data=refresh_token, content_type='application/json')
         self.assertEqual(resp.status_code, 401)
 
         data = resp.json()
@@ -53,7 +49,7 @@ class RefreshTokenTestCase(TestCase):
     def test_bad_token(self):
         refresh_token = {
             'refresh': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjU5MDI5NDIuMzIxNjU3LCJpYXQiOjE3MjMzMTA5NDIuMzIxNjU3LCJqdGkiOiJkMzI4N2JhNS03YWE2LTRmMzQtOWZiNC1hZGEzNGIzZWZkMWIiLCJ1c2VyX2lkIjoxLCJ0eXBlIjoicmVmcmVzaCJ9.u_JLiXcmbSWBiy7X64M9Sb0mqCZDH82_p4j5UgU7wEE'}  # noqa: E501
-        resp = self.client.post(self.refresh_url, json=refresh_token)
+        resp = self.client.post(self.refresh_url, data=refresh_token, content_type='application/json')
         self.assertEqual(resp.status_code, 401)
 
         data = resp.json()
@@ -62,7 +58,7 @@ class RefreshTokenTestCase(TestCase):
     def test_miss_user_id_payload(self):
         refresh_token = {
             'refresh': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjU5MDI5NDIuMzIxNjU3LCJpYXQiOjE3MjMzMTA5NDIuMzIxNjU3LCJqdGkiOiJkMzI4N2JhNS03YWE2LTRmMzQtOWZiNC1hZGEzNGIzZWZkMWIiLCJ0eXBlIjoicmVmcmVzaCJ9.WdQdAV1hcGKX6PhE3PJIIZB4BlSOZLawxs6gBMZQInw'}  # noqa: E501
-        resp = self.client.post(self.refresh_url, json=refresh_token)
+        resp = self.client.post(self.refresh_url, data=refresh_token, content_type='application/json')
         self.assertEqual(resp.status_code, 401)
 
         data = resp.json()
@@ -71,7 +67,7 @@ class RefreshTokenTestCase(TestCase):
     def test_wrong_user_id_payload(self):
         refresh_token = {
             'refresh': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjU5MDI5NDIuMzIxNjU3LCJpYXQiOjE3MjMzMTA5NDIuMzIxNjU3LCJqdGkiOiJkMzI4N2JhNS03YWE2LTRmMzQtOWZiNC1hZGEzNGIzZWZkMWIiLCJ1c2VyX2lkIjoyMjgsInR5cGUiOiJyZWZyZXNoIn0.m8KkJmuLeUx63qELDJKMNVPWjwH6pqaI9_kTkV0ogFE'}  # noqa: E501
-        resp = self.client.post(self.refresh_url, json=refresh_token)
+        resp = self.client.post(self.refresh_url, data=refresh_token, content_type='application/json')
         self.assertEqual(resp.status_code, 401)
 
         data = resp.json()
@@ -81,7 +77,7 @@ class RefreshTokenTestCase(TestCase):
         refresh_token = {
             'refresh': self.access,
         }
-        resp = self.client.post(self.refresh_url, json=refresh_token)
+        resp = self.client.post(self.refresh_url, data=refresh_token, content_type='application/json')
         self.assertEqual(resp.status_code, 401)
 
         data = resp.json()
@@ -94,7 +90,7 @@ class RefreshTokenTestCase(TestCase):
             refresh_token = {
                 'refresh': self.refresh,
             }
-            resp = self.client.post(self.refresh_url, json=refresh_token)
+            resp = self.client.post(self.refresh_url, data=refresh_token, content_type='application/json')
             self.assertEqual(resp.status_code, 401)
 
             data = resp.json()

@@ -1,14 +1,11 @@
 from django.test import TestCase
-from ninja.testing import TestClient
 
-from qt_auth.api.auth import router
 from qt_user.models import User
 
 
 class SignUpTestCase(TestCase):
     def setUp(self):
-        self.client = TestClient(router)
-        self.signup_url = '/signup'
+        self.signup_url = '/api/auth/signup'
 
     def test_ok(self):
         username = 'test_ok'
@@ -17,7 +14,7 @@ class SignUpTestCase(TestCase):
             'password': 'superpass',
             'email': '         test@example.com           '
         }
-        resp = self.client.post(self.signup_url, json=user_data)
+        resp = self.client.post(self.signup_url, data=user_data, content_type='application/json')
         self.assertEqual(resp.status_code, 201)
 
         data = resp.json()
@@ -29,7 +26,7 @@ class SignUpTestCase(TestCase):
             'password': 'superpass',
             'email': '!z@lupka228@gmail.com'
         }
-        resp = self.client.post('/signup', json=user_data)
+        resp = self.client.post('/signup', data=user_data, content_type='application/json')
         self.assertNotEqual(resp.status_code, 201)
 
     def test_set_username(self):
@@ -37,7 +34,7 @@ class SignUpTestCase(TestCase):
             'password': 'superpass',
             'email': 'test@gmail.com'
         }
-        resp = self.client.post(self.signup_url, json=user_data)
+        resp = self.client.post(self.signup_url, data=user_data, content_type='application/json')
         self.assertEqual(resp.status_code, 201)
 
         user = User.objects.get(username='test')
@@ -48,7 +45,7 @@ class SignUpTestCase(TestCase):
             'password': 'superpass',
             'email': 'test@gmail.com'
         }
-        resp = self.client.post(self.signup_url, json=user_data)
+        resp = self.client.post(self.signup_url, data=user_data, content_type='application/json')
         self.assertEqual(resp.status_code, 201)
 
         exist_username = {
@@ -56,7 +53,7 @@ class SignUpTestCase(TestCase):
             'password': 'superpass',
             'email': 'test1@gmail.com'
         }
-        resp = self.client.post(self.signup_url, json=exist_username)
+        resp = self.client.post(self.signup_url, data=exist_username, content_type='application/json')
         self.assertEqual(resp.status_code, 409)
 
         data = resp.json()
@@ -67,7 +64,7 @@ class SignUpTestCase(TestCase):
             'password': 'superpass',
             'email': 'test@gmail.com'
         }
-        resp = self.client.post(self.signup_url, json=exist_email)
+        resp = self.client.post(self.signup_url, data=exist_email, content_type='application/json')
         self.assertEqual(resp.status_code, 409)
 
         data = resp.json()
