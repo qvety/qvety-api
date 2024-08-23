@@ -5,12 +5,12 @@ from ninja import Field, Schema
 from ninja.errors import ValidationError
 from pydantic import field_validator
 
-from qt_auth.utils import clean_email
+from qt_auth.logic.utils import clean_email
 
 EMAIL_RE = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 
 
-class SignUp(Schema):
+class SignUpRequestSchema(Schema):
     email: str = Field(..., min_length=3, max_length=512)
     username: str = Field(default=None, validate_default=True, min_length=2, max_length=64)
     password: str = Field(..., min_length=8, max_length=64)
@@ -33,25 +33,18 @@ class SignUp(Schema):
         return local_part
 
 
-class SignIn(Schema):
+class SignUpResponseSchema(Schema):
+    username: str
+
+
+class SignInResponseSchema(Schema):
     username: str
     password: str
 
 
-class StatusOk(Schema):
-    status: str
-
-
-class JWTRefreshTokenInfo(Schema):
+class JWTRefreshTokenSchema(Schema):
     refresh: str
 
 
-class JWTTokenInfo(Schema):
+class JWTTokenSchema(JWTRefreshTokenSchema):
     access: str
-    refresh: str
-
-
-class ErrorResponse(Schema):
-    code: str
-    message: str
-    errors: list[dict[str, str]] = Field(default=[])
