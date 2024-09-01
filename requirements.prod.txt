@@ -12,6 +12,12 @@ asgiref==3.8.1
     # via
     #   -r requirements.txt
     #   django
+cffi==1.17.0
+    # via
+    #   -r requirements.txt
+    #   cryptography
+cryptography==43.0.0
+    # via -r requirements.txt
 django==5.0.6
     # via
     #   -r requirements.txt
@@ -32,6 +38,10 @@ packaging==24.0
     # via gunicorn
 psycopg2-binary==2.9.9
     # via -r requirements.txt
+pycparser==2.22
+    # via
+    #   -r requirements.txt
+    #   cffi
 pydantic==2.7.1
     # via
     #   -r requirements.txt
@@ -40,6 +50,8 @@ pydantic-core==2.18.2
     # via
     #   -r requirements.txt
     #   pydantic
+pyjwt==2.9.0
+    # via -r requirements.txt
 redis==5.0.4
     # via
     #   -r requirements.txt

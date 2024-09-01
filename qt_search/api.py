@@ -14,7 +14,7 @@ app = Router()
 
 
 @app.get('/species', response=list[SpeciesSchema])
-@paginate(PageNumberPagination)
+@paginate(PageNumberPagination, page_size=20)
 def get_species(request, filters: FiltersSchema = Query(...)):    # noqa: B008
     # Need to remove distinct for neste query!!!
     species = filters.filter(
