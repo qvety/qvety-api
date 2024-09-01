@@ -16,6 +16,12 @@ attrs==23.2.0
     # via flake8-bugbear
 bandit==1.7.8
     # via flake8-bandit
+cffi==1.17.0
+    # via
+    #   -r requirements.txt
+    #   cryptography
+cryptography==43.0.0
+    # via -r requirements.txt
 django==5.0.6
     # via
     #   -r requirements.txt
@@ -33,6 +39,10 @@ django-ninja==1.1.0
     # via -r requirements.txt
 django-redis==5.4.0
     # via -r requirements.txt
+factory-boy==3.3.1
+    # via -r requirements.dev.in
+faker==28.1.0
+    # via factory-boy
 flake8==7.0.0
     # via
     #   flake8-bandit
@@ -58,6 +68,8 @@ mccabe==0.7.0
     # via flake8
 mdurl==0.1.2
     # via markdown-it-py
+orjson==3.10.7
+    # via -r requirements.txt
 pbr==6.0.0
     # via stevedore
 psycopg2-binary==2.9.9
@@ -66,6 +78,10 @@ pycodestyle==2.11.1
     # via
     #   flake8
     #   flake8-print
+pycparser==2.22
+    # via
+    #   -r requirements.txt
+    #   cffi
 pydantic==2.7.1
     # via
     #   -r requirements.txt
@@ -78,6 +94,10 @@ pyflakes==3.2.0
     # via flake8
 pygments==2.18.0
     # via rich
+pyjwt==2.9.0
+    # via -r requirements.txt
+python-dateutil==2.9.0.post0
+    # via faker
 pyyaml==6.0.1
     # via bandit
 redis==5.0.4
@@ -90,6 +110,7 @@ six==1.16.0
     # via
     #   -r requirements.txt
     #   django-bitfield
+    #   python-dateutil
 sqlparse==0.5.0
     # via
     #   -r requirements.txt
