@@ -34,6 +34,8 @@ django-redis==5.4.0
     # via -r requirements.txt
 gunicorn==22.0.0
     # via -r requirements.prod.in
+orjson==3.10.7
+    # via -r requirements.txt
 packaging==24.0
     # via gunicorn
 psycopg2-binary==2.9.9
