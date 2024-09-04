@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'qt_user.apps.QtUserConfig',
     'qt_auth.apps.QtAuthConfig',
     'qt_space.apps.QtSpaceConfig',
+    'qt_garden.apps.QtGardenConfig',
 ]
 
 MIDDLEWARE = [
