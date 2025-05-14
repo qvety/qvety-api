@@ -3,6 +3,7 @@ from django.db.models import QuerySet
 
 from qt_garden.logic.exceptions import GardenItemNotFoundError
 from qt_garden.models import Garden, GardenParameters
+from qt_garden.schemas.filter import GardenFilter
 from qt_garden.schemas.garden import GardenRequestSchema
 from qt_user.models import User
 
@@ -32,8 +33,8 @@ class GardenServie:
         garden.save()
         return garden
 
-    def get_list(self) -> QuerySet[Garden]:
-        return Garden.objects.select_related('specie').filter(user=self.current_user).all()
+    def get_list(self, filters: GardenFilter) -> QuerySet[Garden]:
+        return filters.filter(Garden.objects.select_related('specie').filter(user=self.current_user).all())
 
     @transaction.atomic
     def update(self, uid: int, data: GardenRequestSchema) -> Garden:
