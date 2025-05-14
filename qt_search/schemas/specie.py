@@ -212,7 +212,7 @@ class SpeciesSchema(ModelSchema):
 
     class Meta:
         model = Specie
-        fields = ('slug', 'latin_name', 'image_url')
+        fields = ('id', 'slug', 'latin_name', 'image_url')
 
     @staticmethod
     def resolve_main_common_name(obj: Specie) -> LimitStr | None:
@@ -267,6 +267,7 @@ class SpeciesDetailsSchema(ModelSchema):
     class Meta:
         model = Specie
         fields = (
+            'id',
             'slug',
             'latin_name',
             'image_url',

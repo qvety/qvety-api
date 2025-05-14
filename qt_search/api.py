@@ -32,7 +32,7 @@ def get_species(request, filters: FiltersSchema = Query(...)):    # noqa: B008
                 queryset=CommonName.objects.filter(is_main=True, lang='ru')[:1],
                 to_attr='ru_main_common_name',
             )
-        ).only('slug', 'latin_name', 'image_url').order_by('rating').distinct().all()
+        ).only('id', 'slug', 'latin_name', 'image_url').order_by('rating').distinct().all()
     )
     return species
 
