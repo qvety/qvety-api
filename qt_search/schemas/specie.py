@@ -229,7 +229,6 @@ class SpeciesSchema(ModelSchema):
 
 class SpeciesDetailsSchema(ModelSchema):
     main_common_name: LimitStr | None
-    ru_main_common_name: LimitStr | None
     tags: list[LimitStr]
     synonyms: list[LimitStr]
     sources: list[SourcesSchema]
@@ -344,10 +343,4 @@ class SpeciesDetailsSchema(ModelSchema):
     def resolve_main_common_name(obj: Specie) -> LimitStr | None:
         if main_common_name := next(iter(obj.main_common_name or []), None):
             return main_common_name.name
-        return None
-
-    @staticmethod
-    def resolve_ru_main_common_name(obj: Specie) -> LimitStr | None:
-        if ru_main_common_name := next(iter(obj.ru_main_common_name or []), None):
-            return ru_main_common_name.name
         return None
